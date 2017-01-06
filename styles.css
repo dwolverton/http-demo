@@ -1,0 +1,10 @@
+h1 {
+  font-family: sans-serif;
+  color: steelblue;
+}
+form {
+    border: 1px solid steelblue;
+    float: left;
+    padding: 10px;
+    margin: 10px;
+}
