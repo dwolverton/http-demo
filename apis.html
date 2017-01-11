@@ -1,0 +1,77 @@
+<!doctype html>
+<!-- Hosted at https://dwolverton.github.io/http-demo/index.html -->
+<html>
+<head>
+    <title>HTTP Demo</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script
+  src="https://code.jquery.com/jquery-3.1.1.min.js"
+  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+  crossorigin="anonymous"></script>
+  <script>
+  $(function() {
+
+  $("#yoda").on("click", function() {
+    $.get({
+      url: "https://yoda.p.mashape.com/yoda?sentence=I+have+a+bad+feeling+about+this!",
+      headers: {
+        "X-Mashape-Key": localStorage.apiKey,
+        "Accept": "text/plain"
+      }
+    }, function(responseBody) { log(responseBody); });
+  });
+  $("#weather").on("click", function() {
+    $.get({
+      url: "https://simple-weather.p.mashape.com/weather",
+      data: { lat: "42.3360205", lng: "-83.0499214,20" },
+      headers: {
+        "X-Mashape-Key": localStorage.apiKey,
+        "Accept": "text/plain"
+      }
+    }, function(responseBody) { log(responseBody); });
+  });
+  $("#key-error").on("click", function() {
+    $.get("https://yoda.p.mashape.com/yoda?sentence=I+have+a+bad+feeling+about+this!",
+      function(responseBody) { log(responseBody); });
+  });
+  $("#cors-error").on("click", function() {
+    $.get("http://api.dronestre.am/data",
+      function(responseBody) { log(responseBody); });
+  });
+
+  function log(text) {
+    $('<p style="clear: both;">').text(text).appendTo(document.body);
+  }
+
+  $("#apiKey").on("change", function() {
+      localStorage.apiKey = this.value;
+  }).val(localStorage.apiKey || "");
+
+  });
+  </script>
+</head>
+<body>
+    <h1>APIs</h1>
+    <p>
+        <button type="button" id="yoda">
+          Yoda Speak
+        </button>
+        <button type="button" id="weather">
+          Weather
+        </button>
+        <button type="button" id="key-error">
+          API Key Missing
+        </button>
+        <button type="button" id="cors-error">
+          CORS Error
+        </button>
+    </p>
+
+    <form>
+        <h3>Enter API key.</h3>
+        <p>
+            <label><input type="text" id="apiKey" value="" size="60" /> Mashape API Key</label>
+        </p>
+    </form>
+</body>
+</html>
