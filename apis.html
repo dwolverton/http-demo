@@ -15,7 +15,7 @@
     $.get({
       url: "https://yoda.p.mashape.com/yoda?sentence=I+have+a+bad+feeling+about+this!",
       headers: {
-        "X-Mashape-Key": localStorage.apiKey,
+        "X-Mashape-Key": localStorage.mashapeKey,
         "Accept": "text/plain"
       }
     }, function(responseBody) { log(responseBody); });
@@ -25,10 +25,19 @@
       url: "https://simple-weather.p.mashape.com/weather",
       data: { lat: "42.3360205", lng: "-83.0499214,20" },
       headers: {
-        "X-Mashape-Key": localStorage.apiKey,
+        "X-Mashape-Key": localStorage.mashapeKey,
         "Accept": "text/plain"
       }
     }, function(responseBody) { log(responseBody); });
+  });
+  $("#flickr").on("click", function() {
+    $.get({
+      url: "https://api.flickr.com/services/rest/?method=flickr.test.echo",
+      data: {
+          name: "Hello Flickr!",
+          api_key: localStorage.flickrKey
+      }
+  }, function(responseBody) { window.x = responseBody; log(responseBody); });
   });
   $("#key-error").on("click", function() {
     $.get("https://yoda.p.mashape.com/yoda?sentence=I+have+a+bad+feeling+about+this!",
@@ -40,12 +49,19 @@
   });
 
   function log(text) {
-    $('<p style="clear: both;">').text(text).appendTo(document.body);
+    console.log(text);
+    if (text instanceof XMLDocument) {
+        text = new XMLSerializer().serializeToString(text);
+    }
+    $('<pre style="clear: both;">').text(text).appendTo(document.body);
   }
 
-  $("#apiKey").on("change", function() {
-      localStorage.apiKey = this.value;
-  }).val(localStorage.apiKey || "");
+  $("#mashapeKey").on("change", function() {
+      localStorage.mashapeKey = this.value;
+  }).val(localStorage.mashapeKey || "");
+  $("#flickrKey").on("change", function() {
+      localStorage.flickrKey = this.value;
+  }).val(localStorage.flickrKey || "");
 
   });
   </script>
@@ -59,6 +75,9 @@
         <button type="button" id="weather">
           Weather
         </button>
+        <button type="button" id="flickr">
+          Flickr Echo
+        </button>
         <button type="button" id="key-error">
           API Key Missing
         </button>
@@ -68,9 +87,16 @@
     </p>
 
     <form>
-        <h3>Enter API key.</h3>
+        <h3>Enter Mashape API key.</h3>
         <p>
-            <label><input type="text" id="apiKey" value="" size="60" /> Mashape API Key</label>
+            <label><input type="text" id="mashapeKey" value="" size="60" /> Mashape API Key</label>
+        </p>
+    </form>
+
+    <form>
+        <h3>Enter Flickr API key.</h3>
+        <p>
+            <label><input type="text" id="flickrKey" value="" size="40" /> Flickr API Key</label>
         </p>
     </form>
 </body>
